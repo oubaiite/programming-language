@@ -11,12 +11,14 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('site');
             $table->string('city');
+            $table->integer('area');
             $table->enum('type',['home','villa','warehouse']);
             $table->integer('number_of_room');
             $table->string('owner');
             $table->enum('valuation',['1','2','3','4','5']);
-            $table->text('description');
+            $table->string('description');
             $table->string('owner_phone');
+            $table->boolean('favorite')->nullable()->default(false);
             $table->integer('price');
             $table->timestamps();
         });

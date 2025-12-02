@@ -16,19 +16,21 @@ class StoreApartmentRequest extends FormRequest
 
     public function rules(): array
     {
-        if($this->isMethod('post'))
+        if($this->isMethod('post')){
         return [
-          'site'=>'',
-          'type'=>'',
-          'number_of_room'=>'',
-          'owner'=>'',
-          'owner_phone'=>'',
-          ''
+          'site'=>'required|string',
+          'type'=>'required|in:home,villa,warehouse',
+          'area'=>'required|integer',
+          'number_of_room'=>'required|integer|min:1|max:10',
+          'city'=>'required|string',
+          'price'=>'required|integer',
+          'description'=>'required|string'
         ];
+    }
         else
         {
             return [
-                ''
+                'valuation'=>'required|integer|in:1,2,3,4,5'
             ];
         }
     }

@@ -11,12 +11,13 @@ return new class extends Migration
             $table->string('phone');
             $table->string('password');
             $table->string('email')->unique();
+            $table->string('email_verified_at')->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->date('date_of_birth');
             $table->string('personal_photo');
             $table->string('photo_of_personal_ID');
-            $table->enum('role',['tenant','rented']);
+            $table->enum('role',['tenant','rented','admin']);
             $table->text('bio')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -11,6 +11,11 @@ class CheckUserRole
 {
     public function handle(Request $request, Closure $next): Response
     {
+     if (!Auth::check()){
+        return response()->json([
+            'message' => 'Unauthenticated'
+        ], 401);
+    }
         if(Auth::user()->role==='tenant')
             return $next($request);
             return response()->json([

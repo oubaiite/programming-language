@@ -51,4 +51,21 @@ class UserController extends Controller
         ['message'=>'logout sucessfully']
       );
     }
+    public function getaAllUser()
+    {
+        $user=User::where('role','!=','admin')->get();
+        return response()->json($user,200);
+    }
+    public function deleteUser(Request $request)
+    {
+    $request->validate([
+        'phone' => 'required|string'
+    ]);
+    $deleted = User::where('phone', $request->phone)->delete();
+    if ($deleted) {
+        return response()->json(['message' => 'User deleted successfully']);
+    } else {
+        return response()->json(['message' => 'User not found'], 404);
+    }
+}
 }
