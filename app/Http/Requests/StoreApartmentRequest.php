@@ -30,7 +30,7 @@ class StoreApartmentRequest extends FormRequest
         else
         {
             return [
-                'valuation'=>'required|integer|in:1,2,3,4,5'
+                
             ];
         }
     }

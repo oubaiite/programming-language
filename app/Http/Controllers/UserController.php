@@ -59,9 +59,9 @@ class UserController extends Controller
     public function deleteUser(Request $request)
     {
     $request->validate([
-        'phone' => 'required|string'
+        'id' => 'required|exists,users'
     ]);
-    $deleted = User::where('phone', $request->phone)->delete();
+    $deleted = User::where('phone', $request->id)->delete();
     if ($deleted) {
         return response()->json(['message' => 'User deleted successfully']);
     } else {
