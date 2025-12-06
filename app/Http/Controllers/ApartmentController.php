@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreApartmentRequest;
 use App\Models\Apartment;
+use App\Notifications\ApartmentNotifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
-
 class ApartmentController extends Controller
 {
     public function getAllApartments()
@@ -46,6 +47,7 @@ class ApartmentController extends Controller
         $validateData['owner_phone']=$numberPhone;
         $bulid=Apartment::create($validateData);
         return response()->json($bulid,201);*/
+        Notification::send($user,new ApartmentNotifications($apartment));// ('','المستلم')
         return response()->json([
             'owner'=>[
             'name'=>$user->first_name . ' ' . $user->last_name,

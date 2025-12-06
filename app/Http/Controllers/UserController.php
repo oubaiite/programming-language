@@ -4,6 +4,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,5 +68,25 @@ class UserController extends Controller
     } else {
         return response()->json(['message' => 'User not found'], 404);
     }
-}
+    }
+    public function selectLanguage($locale)
+    {
+        if (!in_array($locale, ['en', 'ar'])) {
+            return response()->json(['message' => 'language not supported'], 400);
+        }
+        App::setLocale($locale);
+        session()->put('locale', $locale);
+        return response()->json(['message' => 'done'], 200);
+    }
+    public function getNotificatios()
+    {
+        $notifications=auth()->user()->notifications;
+        return response()->json($notifications,200);
+    }
+    public function markAsRead($notificationId)
+    {
+        $notifications=auth()->user()->notifications()->findorfail($notificationId);
+        $notifications->markAsRead();
+        return response()->json(['message'=>'notifications marked as read'],200);
+    }
 }
