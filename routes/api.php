@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProfileController;
@@ -15,17 +16,23 @@ Route::get('/user', function (Request $request) {
 
 Route::post('register',[UserController::class,'register']);
 Route::post('login',[UserController::class,'login']);
-Route::post('logout',[UserController::class,'logout'])->middleware('auth:sanctum');
 
-
-
-Route::delete('removeUser',[UserController::class,'deleteUser'])->middleware(['auth:sanctum','CheckAdmin']);
-Route::get('getaAllUser',[UserController::class,'getaAllUser']);
-
-Route::post('postApartment', [ApartmentController::class, 'postApartment'])->middleware(['auth:sanctum', 'CheckUserRole']);
+Route::middleware(['auth:sanctum','CheckAdmin'])->group(function () {;
+    Route::get('/pending-users', [AdminController::class, 'listPending']);
+    Route::post('/pending-users/approve', [AdminController::class, 'approve']);
+    Route::post('/pending-users/reject', [AdminController::class, 'reject']);
+    Route::delete('removeUser/{id}',[AdminController::class,'deleteUser']);
+    Route::get('getaAllUser',[AdminController::class,'getaAllUser']);
+});
+Route::middleware(['auth:sanctum', 'CheckUserRole'])->group(function()
+{
 Route::post('valuation',[ApartmentController::class,'valuation']);
+Route::post('postApartment', [ApartmentController::class, 'postApartment']);
 Route::get('getApartments',[ApartmentController::class,'getAllApartments']);
+});
 Route::get('notifications',[UserController::class,'getNotificatios'])->middleware(['auth:sanctum', 'CheckUserRole']);
 Route::post('notifications/{id}/read',[UserController::class,'markAsRead'])->middleware(['auth:sanctum', 'CheckUserRole']);;
+Route::post('logout',[UserController::class,'logout'])->middleware('auth:sanctum');
+
 Route::get('/test',[Controller::class,'test']);
 Route::get('language/{locale}',[UserController::class,'selectLanguage']);

@@ -1,12 +1,15 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
+use App\Mail\WelcomeAppRents;
+use App\Models\PendingUser;
 use App\Models\User;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller
 {
@@ -14,6 +17,8 @@ class UserController extends Controller
     {
      $data = $request->validated();
      $data['password'] = Hash::make($data['password']);
+    $path1 = null;
+    $path2 = null;
      if($request->hasFile('personal_photo')&&$request->hasFile('photo_of_personal_ID'))
      {
         $path1=$request->file('personal_photo')->store('my_photo_personal','public');
@@ -21,11 +26,18 @@ class UserController extends Controller
         $data['personal_photo']=$path1;
         $data['photo_of_personal_ID']=$path2;
     }
-     $user = User::create($data);
+    PendingUser::create([
+        'phone'=>$data['phone'],
+        'first_name'=>$data['first_name'],
+        'last_name'=>$data['last_name'],
+        'password' => $data['password'],
+        'personal_photo'=>$path1,
+        'photo_of_personal_ID'=>$path2,
+    ]);
+    // $user = User::create($data);
+    // Mail::to($user->email)->send(new WelcomeAppRents($user));
     return response()->json([
-        'message'=>'User Registered Successfully',
-        'User'=>$user
-    ],201);
+        'message'=>'The registration request has been submitted and is awaiting administrative approval.'],200);
     }
     public function login(Request $request)
     {
@@ -42,6 +54,7 @@ class UserController extends Controller
      return response()->json([
         'message'=>'login Successfully',
         'User'=>$user,
+        'code'=>200,
         'token'=>$token
      ]);
     }
@@ -51,23 +64,6 @@ class UserController extends Controller
       return response()->json(
         ['message'=>'logout sucessfully']
       );
-    }
-    public function getaAllUser()
-    {
-        $user=User::where('role','!=','admin')->get();
-        return response()->json($user,200);
-    }
-    public function deleteUser(Request $request)
-    {
-    $request->validate([
-        'id' => 'required|exists,users'
-    ]);
-    $deleted = User::where('phone', $request->id)->delete();
-    if ($deleted) {
-        return response()->json(['message' => 'User deleted successfully']);
-    } else {
-        return response()->json(['message' => 'User not found'], 404);
-    }
     }
     public function selectLanguage($locale)
     {

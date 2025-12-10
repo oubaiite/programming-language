@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Http\Requests\StoreApartmentRequest;
 use App\Models\Apartment;
 use App\Notifications\ApartmentNotifications;

@@ -21,16 +21,19 @@ class LangSwitcher
             app()->setLocale("en");
         return $next($request);
         */
-        $locale = $request->header('Accept-Language', 'en');
-        // 2. قائمة اللغات المدعومة لحماية النظام
+        /*$locale = $request->header('Accept-Language', 'en');
         $supportedLanguages = ['ar', 'en'];
-        // 3. التحقق وتغيير اللغة
         if (in_array($locale, $supportedLanguages)) {
             App::setLocale($locale);
         } else {
             App::setLocale('en');
+        }*/
+        $locale = $request->header('Accept-Language', $request->query('lang', 'en'));
+        if (!in_array($locale, ['en', 'ar'])) {
+            $locale = 'en';
         }
-
+        App::setLocale($locale);
+        session()->put('locale', $locale);
         return $next($request);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckUserRole;
 use App\Http\Middleware\LangSwitcher;
 use Illuminate\Foundation\Application;
@@ -16,7 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
          'CheckUserRole'=>CheckUserRole::class,
-         'selectLanguage'=>LangSwitcher::class
+         'selectLanguage'=>LangSwitcher::class,
+         'CheckAdmin'=>CheckAdmin::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
