@@ -10,10 +10,6 @@ use Illuminate\Notifications\Notification;
 class UserNotifications extends Notification
 {
     use Queueable;
-
-    /**
-     * Create a new notification instance.
-     */
     public function __construct()
     {
 
@@ -36,7 +32,7 @@ class UserNotifications extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+
         ];
     }
 }

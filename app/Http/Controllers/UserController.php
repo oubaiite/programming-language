@@ -37,7 +37,9 @@ class UserController extends Controller
     // $user = User::create($data);
     // Mail::to($user->email)->send(new WelcomeAppRents($user));
     return response()->json([
-        'message'=>'The registration request has been submitted and is awaiting administrative approval.'],200);
+        'message'=>'The registration request has been submitted and is awaiting administrative approval.',
+        'user'=>$data
+    ],200);
     }
     public function login(Request $request)
     {
