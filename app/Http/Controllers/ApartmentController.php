@@ -14,6 +14,7 @@ class ApartmentController extends Controller
      $apartments = Apartment::with('user:id,first_name,last_name,phone')->get();
       $data = $apartments->map(function($apartment) {
         return [
+            'id'             =>$apartment->id,
             'site'           => $apartment->site,
             'type'           => $apartment->type,
             'area'           => $apartment->area,
@@ -22,12 +23,16 @@ class ApartmentController extends Controller
             'price'          => $apartment->price,
             'description'    => $apartment->description,
             'owner' => [
+                'id'=>$apartment->user->id,
                 'name'  => $apartment->user->first_name . ' ' . $apartment->user->last_name,
                 'phone' => $apartment->user->phone
             ]
         ];
     });
-     return response()->json($data,200);
+     return response()->json([
+        'data'=>$data,
+        'status code'=>200
+     ],200);
     }
     public function postApartment(StoreApartmentRequest $request)
     {

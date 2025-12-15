@@ -15,6 +15,7 @@ return new class extends Migration
             $table->enum('type',['home','villa','warehouse']);
             $table->integer('number_of_room');
             $table->string('description');
+            $table->enum('rating',[1,2,3,4,5]);
             $table->boolean('favorite')->nullable()->default(false);
             $table->integer('price');
             $table->timestamps();

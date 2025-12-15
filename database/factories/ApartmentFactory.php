@@ -42,6 +42,7 @@ class ApartmentFactory extends Factory
         'type' =>fake()->randomElement(['home','villa','warehouse']),
         'description'=>fake()->sentence,
         'number_of_room'=>fake()->numberBetween(1,10),
+        'rating'=>fake()->numberBetween(1,5),
         'price'=>fake()->numberBetween(1500,1000000),
         ];
     }

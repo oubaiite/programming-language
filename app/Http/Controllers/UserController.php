@@ -38,7 +38,8 @@ class UserController extends Controller
     // Mail::to($user->email)->send(new WelcomeAppRents($user));
     return response()->json([
         'message'=>'The registration request has been submitted and is awaiting administrative approval.',
-        'user'=>$data
+        'user'=>$data,
+        'status code'=>200
     ],200);
     }
     public function login(Request $request)
@@ -50,7 +51,9 @@ class UserController extends Controller
         ]);
       if(!Auth::attempt($request->only('phone','password')))
         return response()->json([
-      'message'=>'invalid phone or password'],401);
+        'message'=>'invalid phone or password',
+        'status code'=>401
+           ],401);
      $user=User::where('phone',$request->phone)->FirstOrFail();
      $token=$user->createToken('auth_token')->plainTextToken;
      return response()->json([
@@ -64,7 +67,9 @@ class UserController extends Controller
     {
       $request->user()->currentAccessToken()->delete();
       return response()->json(
-        ['message'=>'logout sucessfully']
+        ['message'=>'logout sucessfully',
+        'status code'=>200
+        ]
       );
     }
     public function selectLanguage($locale)
@@ -74,7 +79,10 @@ class UserController extends Controller
         }
         App::setLocale($locale);
         session()->put('locale', $locale);
-        return response()->json(['message' => 'done'], 200);
+        return response()->json([
+            'message' => 'done',
+            'status coe'=>200
+        ], 200);
     }
     public function getNotificatios()
     {
