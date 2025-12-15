@@ -21,6 +21,7 @@ class ApartmentController extends Controller
             'number_of_room' => $apartment->number_of_room,
             'city'           => $apartment->city,
             'price'          => $apartment->price,
+            'rating'         => $apartment->rating,
             'description'    => $apartment->description,
             'owner' => [
                 'id'=>$apartment->user->id,
