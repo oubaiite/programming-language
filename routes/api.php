@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ Route::middleware(['auth:sanctum','CheckAdmin'])->group(function () {;
     Route::delete('removeUser/{id}',[AdminController::class,'deleteUser']);
     Route::get('getaAllUser',[AdminController::class,'getaAllUser']);
 });
-Route::middleware(['auth:sanctum', 'CheckUserRole'])->group(function()
+Route::middleware(['auth:sanctum','CheckUserRole'])->group(function()
 {
 Route::post('valuation',[ApartmentController::class,'valuation']);
 Route::post('postApartment', [ApartmentController::class, 'postApartment']);
@@ -36,3 +37,7 @@ Route::post('logout',[UserController::class,'logout'])->middleware('auth:sanctum
 
 Route::get('/test',[Controller::class,'test']);
 Route::get('language/{locale}',[UserController::class,'selectLanguage']);
+
+
+Route::get('products', [ProductController::class, 'index']);
+Route::get('products/{id}', [ProductController::class, 'show']);

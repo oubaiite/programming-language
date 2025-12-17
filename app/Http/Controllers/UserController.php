@@ -17,8 +17,8 @@ class UserController extends Controller
     {
      $data = $request->validated();
      $data['password'] = Hash::make($data['password']);
-    $path1 = null;
-    $path2 = null;
+     $path1 = null;
+     $path2 = null;
      if($request->hasFile('personal_photo')&&$request->hasFile('photo_of_personal_ID'))
      {
         $path1=$request->file('personal_photo')->store('my_photo_personal','public');
@@ -26,16 +26,16 @@ class UserController extends Controller
         $data['personal_photo']=$path1;
         $data['photo_of_personal_ID']=$path2;
     }
-    PendingUser::create([
+   /* PendingUser::create([
         'phone'=>$data['phone'],
         'first_name'=>$data['first_name'],
         'last_name'=>$data['last_name'],
         'password' => $data['password'],
         'personal_photo'=>$path1,
         'photo_of_personal_ID'=>$path2,
-    ]);
-    // $user = User::create($data);
-    // Mail::to($user->email)->send(new WelcomeAppRents($user));
+    ]);*/
+     $user = User::create($data);
+     Mail::to($user->email)->send(new WelcomeAppRents($user));
     return response()->json([
         'message'=>'The registration request has been submitted and is awaiting administrative approval.',
         'user'=>$data,
@@ -49,12 +49,20 @@ class UserController extends Controller
         'phone'=>'required|digits:10',
         'password'=>'required|string|min:8'
         ]);
-      if(!Auth::attempt($request->only('phone','password')))
+      if(!Auth::attempt($request->only('phone','password'))){
         return response()->json([
         'message'=>'invalid phone or password',
         'status code'=>401
            ],401);
-     $user=User::where('phone',$request->phone)->FirstOrFail();
+        }
+    $user = User::where('phone', $request->phone)->first();
+    if(!$user) {
+        return response()->json([
+            'message' => 'User not found',
+            'status_code' => 404
+        ], 404);
+    }
+     //$user=User::where('phone',$request->phone)->FirstOrFail();
      $token=$user->createToken('auth_token')->plainTextToken;
      return response()->json([
         'message'=>'login Successfully',

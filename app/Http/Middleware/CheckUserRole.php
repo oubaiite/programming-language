@@ -14,7 +14,7 @@ class CheckUserRole
     if (!$request->user()) {
         return response()->json(['message' => 'Unauthenticated'], 401);
     }
-    if ($request->user()->role === 'tenant'||$request->user()->role === 'admin') {
+    if ($request->user()->role === 'tenant'||$request->user()->role === 'admin'||$request->user()->role=='rented') {
         return $next($request);
     }
     return response()->json(['message' => 'unauthorized'], 403);
